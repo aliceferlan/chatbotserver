@@ -21,8 +21,8 @@ app.post("/webhook", (req, res) => {
 
 	// リクエストをそのままエコーとして返す
 	res.json({
-		status: "ok",
-		message: req.body.events[0].message.text,
+		type: "text",
+		text: textmessage,
 	});
 });
 
