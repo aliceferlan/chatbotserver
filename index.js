@@ -18,6 +18,7 @@ app.post("/webhook", (req, res) => {
 
 	textmessage = req.body.events[0].message.text;
 	console.log(textmessage);
+	console.log("Received webhook:", textmessage);
 
 	// リクエストをそのままエコーとして返す
 	res.json({
