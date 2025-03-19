@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ルートエンドポイント
 app.get("/", (req, res) => {
-	res.send("Line Message API Echo Server is running!");
+	res.send("Line Message API Echo Server is running! v0.3");
 });
 
 // Line Messaging API からのWebhookを処理するエンドポイント
