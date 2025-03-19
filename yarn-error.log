@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/btf/.nodebrew/node/v14.16.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js init
+
+PATH: 
+  /Users/btf/.cargo/bin:/Users/btf/src/go/bin:/Users/btf/.gvm/pkgsets/go1.12.5/global/bin:/Users/btf/src/go/bin:/Users/btf/.gvm/pkgsets/go1.12.5/global/bin:/Users/btf/.gvm/gos/go1.12.5/bin:/Users/btf/.gvm/pkgsets/go1.12.5/global/overlay/bin:/Users/btf/.gvm/bin:/Users/btf/.gvm/bin:/Users/btf/.rvm/gems/ruby-2.3-head/bin:/Users/btf/.rvm/gems/ruby-2.3-head@global/bin:/Users/btf/.rvm/rubies/ruby-2.3-head/bin:/Users/btf/bin/google-cloud-sdk/bin:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/Users/btf/.pyenv/shims:/Users/btf/bin/flutter/bin:/Users/btf/bin/recon:/Users/btf/bin/emscripten:/Applications/MAMP/bin/php/php5.6.10/bin:/Users/btf/bin/asm:/usr/local/bin/ant//bin:/Applications/Android Studio.app/Contents/gradle/gradle-4.6/bin:/Users/btf/bin/android-sdk/tools:/Users/btf/bin/android-sdk/platform-tools:/Users/btf/.nodebrew/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/opt/X11/bin:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin:/Library/Developer/CommandLineTools/usr/bin:/Users/btf/.composer/vendor/bin:/Users/btf/.rvm/bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  14.16.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:137008:13)
+      at Interface.emit (events.js:315:20)
+      at Interface._ttyWrite (readline.js:875:16)
+      at ReadStream.onkeypress (readline.js:213:10)
+      at ReadStream.emit (events.js:315:20)
+      at emitKeys (internal/readline/utils.js:345:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1144:36)
+      at ReadStream.emit (events.js:315:20)
+      at addChunk (internal/streams/readable.js:309:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
