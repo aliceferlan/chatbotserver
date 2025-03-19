@@ -1,0 +1,20 @@
+{
+	"name": "line-echo-server",
+	"version": "1.0.0",
+	"description": "Line Message API Echo Server",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"dev": "nodemon index.js"
+	},
+	"dependencies": {
+		"express": "^4.18.2",
+		"body-parser": "^1.20.2"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.1"
+	},
+	"engines": {
+		"node": ">=14"
+	}
+}
