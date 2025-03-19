@@ -8,7 +8,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "webpack --config webpack.config.js",
-    "test": "jest"
+    "test": "jest",
+    "vercel-build": "tsc"
   },
   "jest": {
     "globals": {
