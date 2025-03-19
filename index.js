@@ -4,10 +4,12 @@ const bodyParser = require("body-parser");
 const crypto = require("crypto");
 const app = express();
 
-// 環境変数からチャネルシークレットを取得
-const LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET;
+// 環境変数からチャンネルシークレットを取得
+const LINE_CHANNEL_SECRET =
+	process.env.LINE_CHANNEL_SECRET || "your_channel_secret";
 
-// JSONリクエストの解析設定
+// body-parserの設定
+// 「raw」形式のデータを取得できるように設定
 app.use(
 	bodyParser.json({
 		verify: (req, res, buf) => {
@@ -22,95 +24,118 @@ app.get("/", (req, res) => {
 	res.send("Line Message API Echo Server is running!");
 });
 
-// Lineからのシグネチャを検証する関数
-function validateSignature(signature, body) {
-	const hmac = crypto.createHmac("SHA256", LINE_CHANNEL_SECRET);
-	const bodyString = Buffer.isBuffer(body) ? body.toString() : body;
-	hmac.update(bodyString);
-	const generatedSignature = hmac.digest("base64");
-	return signature === generatedSignature;
-}
-
-// Webhook処理エンドポイント
+// Line Messaging API からのWebhookを処理するエンドポイント
 app.post("/webhook", (req, res) => {
-	// シグネチャの取得
-	const signature = req.headers["x-line-signature"];
+	console.log("リクエスト受信:", JSON.stringify(req.body, null, 2));
+	console.log("ヘッダー:", JSON.stringify(req.headers, null, 2));
 
-	// シグネチャがない場合はエラー
-	if (!signature) {
-		console.log("Signature missing");
-		return res.status(401).send("Signature required");
+	try {
+		// リクエストの署名を検証
+		const signature = req.headers["x-line-signature"];
+
+		// 署名検証をスキップするデバッグモード（開発時のみ使用）
+		const isDebugMode = process.env.DEBUG_MODE === "true";
+
+		if (!isDebugMode && !verifySignature(req.rawBody, signature)) {
+			console.log("署名検証失敗");
+			return res.status(401).send("Invalid signature");
+		}
+
+		// Line からのイベントを処理
+		const events = req.body.events || [];
+		console.log(`${events.length} 件のイベントを受信`);
+
+		// レスポンスメッセージの作成
+		const responseMessages = [];
+
+		events.forEach((event) => {
+			if (event.type === "message" && event.message.type === "text") {
+				// テキストメッセージの場合、受信したメッセージをそのまま返す
+				responseMessages.push({
+					type: "text",
+					text: `受信したメッセージ: ${event.message.text}`,
+				});
+			}
+		});
+
+		// Lineへの応答用のリプライトークンがあれば応答メッセージを送信
+		if (
+			events.length > 0 &&
+			events[0].replyToken &&
+			responseMessages.length > 0
+		) {
+			const replyToken = events[0].replyToken;
+
+			// 応答メッセージをコンソールに表示（デバッグ用）
+			console.log(
+				"応答メッセージ:",
+				JSON.stringify(
+					{
+						replyToken: replyToken,
+						messages: responseMessages,
+					},
+					null,
+					2
+				)
+			);
+
+			// HTTPステータス200を返して処理完了を通知
+			res.status(200).end();
+
+			// Line Messaging API にリプライを送信
+			// 実際の実装では、ここで別途Line Messaging APIを呼び出す処理を書く
+			sendReply(replyToken, responseMessages);
+		} else {
+			// イベントがない場合や応答不要の場合は200を返す
+			res.status(200).end();
+		}
+	} catch (error) {
+		console.error("エラー発生:", error);
+		res.status(500).send("Internal Server Error");
 	}
-
-	// シグネチャの検証（本番環境では必須）
-	if (LINE_CHANNEL_SECRET && !validateSignature(signature, req.rawBody)) {
-		console.log("Invalid signature");
-		return res.status(401).send("Invalid signature");
-	}
-
-	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
-
-	// Line Messaging APIはリクエスト処理完了を示すために200 OKを早めに返す必要がある
-	res.status(200).end();
-
-	// リクエストを処理して応答メッセージを送信する
-	// 実際には、ここで受け取ったイベントに基づいて処理を行い、
-	// Line Messaging APIを使って返信を送信する必要があります
-	handleWebhook(req.body);
 });
 
-// Webhookイベントを処理して返信を送る関数
-async function handleWebhook(event) {
-	console.log("Handling webhook event:", event);
+// 署名検証関数
+function verifySignature(body, signature) {
+	if (!signature) return false;
 
-	// イベントがある場合のみ処理
-	if (event.events && event.events.length > 0) {
-		const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+	const hmac = crypto.createHmac("sha256", LINE_CHANNEL_SECRET);
+	const digest = hmac.update(body).digest("base64");
+	return digest === signature;
+}
 
-		// 各イベントに対して処理
-		for (const lineEvent of event.events) {
-			// メッセージイベントの場合
-			if (lineEvent.type === "message") {
-				try {
-					// 受信したメッセージをそのまま返す
-					const response = {
-						replyToken: lineEvent.replyToken,
-						messages: [
-							{
-								type: lineEvent.message.type,
-								text:
-									lineEvent.message.text ||
-									"メッセージを受け取りました",
-							},
-						],
-					};
+// Line Messaging API にリプライを送信する関数
+async function sendReply(replyToken, messages) {
+	// この部分は実際のプロジェクトで実装する
+	// ここでは簡易的に実装を示す
+	console.log(
+		`リプライトークン ${replyToken} に対してメッセージを送信します`
+	);
 
-					// Line Messaging APIに返信を送信
-					const result = await fetch(
-						"https://api.line.me/v2/bot/message/reply",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-								Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
-							},
-							body: JSON.stringify(response),
-						}
-					);
-
-					console.log("Reply sent:", await result.json());
-				} catch (error) {
-					console.error("Error sending reply:", error);
-				}
-			}
-		}
-	}
+	// 実際には以下のようなコードでAPIを呼び出す
+	/*
+  const axios = require('axios');
+  try {
+    const response = await axios.post('https://api.line.me/v2/bot/message/reply', {
+      replyToken: replyToken,
+      messages: messages
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`
+      }
+    });
+    console.log('応答送信成功:', response.data);
+  } catch (error) {
+    console.error('応答送信失敗:', error.response ? error.response.data : error.message);
+  }
+  */
 }
 
 // サーバーのポート設定
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
+	console.log(`サーバーがポート ${PORT} で起動しました`);
 });
 
 // Vercelでデプロイするためにエクスポート
