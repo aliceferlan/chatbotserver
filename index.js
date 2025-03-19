@@ -16,8 +16,11 @@ app.get("/", (req, res) => {
 app.post("/webhook", (req, res) => {
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
 
+	textmessage = req.body.events[0].message.text;
+	console.log(textmessage);
+
 	// リクエストをそのままエコーとして返す
-	res.json(req.body);
+	res.json(textmessage);
 });
 
 // サーバーのポート設定（Vercelではポート設定は無視されますが、ローカルテスト用に設定）
