@@ -8,7 +8,7 @@ function getImage(id: string): any {
 }
 
 
-export function getMessage(messageBody: string): string {
+export function getMessage(request: any): string {
 
 
 

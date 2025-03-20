@@ -1,6 +1,4 @@
-import { promises } from "dns";
-
-// を返す関数
+// メッセージを返す関数
 export function sendResponse(replyToken: string, CHANNEL_ACCESS_TOKEN: string, messages: string[]): Promise<void> {
 	const url = "https://api.line.me/v2/bot/message/reply";
 
@@ -45,15 +43,4 @@ export function sendResponse(replyToken: string, CHANNEL_ACCESS_TOKEN: string, m
 		});
 }
 
-export function verifyRequest(
-	channelSecret: string,
-	httpRequestBody: string,
-	signature: string
-): boolean {
-	const crypto = require("crypto");
-	const hash = crypto
-		.createHmac("sha256", channelSecret)
-		.update(Buffer.from(httpRequestBody, 'utf-8'))
-		.digest("base64");
-	return hash === signature;
-}
+
