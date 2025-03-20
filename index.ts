@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-import { sendResponse } from "./response";
+import { sendResponse, verifyRequest } from "./response";
 
 // Line Message API からのリクエストはJSON形式で送られてくるので、
 // JSON形式のリクエストを解析できるようにする
@@ -15,6 +15,21 @@ app.get("/", (req: any, res: any) => {
 
 // Line Messaging API からのWebhookを処理するエンドポイント
 app.post("/webhook", (req: any, res: any) => {
+
+	// リクエストの検証
+	const channelSecret = process.env.CHANNEL_SECRET;
+	const httpRequestBody = JSON.stringify(req.body);
+	const signature = req.headers["x-line-signature"];
+
+	if (channelSecret == undefined) {
+		console.error("channel seacret env is none")
+		return res.status(400).send("CHANNEL_SECRET is not set");
+	}
+	if (!verifyRequest(channelSecret, httpRequestBody, signature)) {
+		console.error("Invalid request");
+		return res.status(400).send("Invalid request");
+	}
+
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
 
 	const textmessage = req.body.events[0].message.text;
