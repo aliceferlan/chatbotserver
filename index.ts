@@ -30,7 +30,14 @@ app.post("/webhook", (req: any, res: any) => {
 		return res.status(400).send("Invalid request");
 	}
 
+	// bodyの中身を確認
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
+
+
+	if (req.body.events.length === 0) {
+		console.error("No events found");
+		return res.status(200).send("No events found. Verify the request is a valid LINE Messaging API event.");
+	}
 
 	const textmessage = req.body.events[0].message.text;
 	console.log(textmessage);
