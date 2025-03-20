@@ -1,4 +1,6 @@
-export function sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, messages) {
+import { promises } from "dns";
+
+export function sendResponse(replyToken: string, CHANNEL_ACCESS_TOKEN: string, messages: string[]): Promise<void> {
 	const url = "https://api.line.me/v2/bot/message/reply";
 
 	const messagesBody = messages.map((message) => {

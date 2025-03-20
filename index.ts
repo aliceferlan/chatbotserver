@@ -26,7 +26,7 @@ app.post("/webhook", (req, res) => {
 	const messages = [textmessage];
 	const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
-	if (!replyToken) {
+	if (!replyToken || !CHANNEL_ACCESS_TOKEN) {
 		console.error("No replyToken found");
 		return res.status(400).send("No replyToken found");
 	}
