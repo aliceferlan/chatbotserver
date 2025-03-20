@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+import { sendResponse } from "./response";
 
 // Line Message API からのリクエストはJSON形式で送られてくるので、
 // JSON形式のリクエストを解析できるようにする
@@ -16,15 +17,28 @@ app.get("/", (req, res) => {
 app.post("/webhook", (req, res) => {
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
 
-	textmessage = req.body.events[0].message.text;
+	const textmessage = req.body.events[0].message.text;
 	console.log(textmessage);
 	console.log("Received webhook:", textmessage);
 
 	// リクエストをそのままエコーとして返す
-	res.json({
-		type: "text",
-		text: textmessage,
-	});
+	const replyToken = req.body.events[0].replyToken;
+	const messages = [textmessage];
+	const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
+
+	if (!replyToken) {
+		console.error("No replyToken found");
+		return res.status(400).send("No replyToken found");
+	}
+
+	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, messages)
+		.then(() => {
+			res.send("OK");
+		})
+		.catch((error) => {
+			console.error("Error sending message to LINE:", error);
+			res.status(500).send("Error");
+		});
 });
 
 // サーバーのポート設定（Vercelではポート設定は無視されますが、ローカルテスト用に設定）
