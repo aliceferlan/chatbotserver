@@ -1,5 +1,6 @@
 import { promises } from "dns";
 
+// を返す関数
 export function sendResponse(replyToken: string, CHANNEL_ACCESS_TOKEN: string, messages: string[]): Promise<void> {
 	const url = "https://api.line.me/v2/bot/message/reply";
 
