@@ -32,6 +32,7 @@ export function checkRequestBody(
 
     // events.typeを取得
     const eventType = request.events[0].type;
+    console.log("eventType: ", eventType);
 
     if (eventType === "text") {
         console.log("text event found");
