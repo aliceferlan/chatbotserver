@@ -29,10 +29,16 @@ export function checkRequestBody(
         };
     }
 
+    if (request.events[0].type !== "message") {
+        console.log("No events found. its Verify the request is a valid LINE Messaging API event.");
+        return {
+            type: "error",
+            text: "Event type is not message. Verify the request is a valid LINE Messaging API event."
+        };
+    }
 
     // events.typeを取得
-    const eventType = request.events[0].type;
-    console.log("eventType: ", eventType);
+    const eventType = request.events[0].message.type;
 
     if (eventType === "text") {
         console.log("text event found");
