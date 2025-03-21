@@ -41,8 +41,8 @@ app.post("/webhook", (req: any, res: any) => {
 		return res.status(200).send(checkedRequest.text);
 	}
 
-	console.log(checkedRequest.text);
 	console.log("Received webhook:", req.body.events[0]);
+	console.log(checkedRequest.text);
 
 	// 応答メッセージを作成
 	const replyToken = req.body.events[0].replyToken;
@@ -54,6 +54,8 @@ app.post("/webhook", (req: any, res: any) => {
 		return res.status(400).send("No replyToken found");
 	}
 
+	console.log("Sending response to LINE:", checkedRequest.text);
+	console.log("Sending response to LINE:", replyToken);
 	// LINE API にメッセージを送信
 	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, [checkedRequest.text])
 		.then(() => {
