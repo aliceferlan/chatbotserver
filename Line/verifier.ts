@@ -34,31 +34,24 @@ export function checkRequestBody(
     const eventType = request.events[0].type;
 
     if (eventType === "text") {
+        console.log("text event found");
         return getMessage(request);
     }
     if (eventType === "image") {
+        console.log("image event found");
         return getImage(request);
     }
     if (eventType === "follow") {
+        console.log("follow event found");
         return greetings(request);
     }
     if (eventType === "sticker") {
+        console.log("sticker event found");
         return getStamp(request);
     }
 
-    const textmessage = request.events[0].message.text;
-    console.log(textmessage);
-    console.log("Received webhook:", textmessage);
-
-    // 応答メッセージを作成
-    if (request.events[0].message.type !== "text") {
-    }
-    const replyToken = request.events[0].replyToken;
-    const messages = [textmessage];
-
     return {
-        type: "text",
-        text: textmessage
+        type: "error",
+        text: "No events found. Verify the request is a valid LINE Messaging API event."
     };
-
 }

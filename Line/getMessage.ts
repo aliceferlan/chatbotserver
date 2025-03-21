@@ -5,9 +5,7 @@ export function getImage(id: string): checkedResponse {
         type: "text",
         text: "画像を受け取りました"
     };
-
 }
-
 
 export function getMessage(request: any): checkedResponse {
     return {
