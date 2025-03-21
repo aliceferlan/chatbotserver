@@ -14,6 +14,9 @@ app.get("/", (req: any, res: any) => {
 	res.send("Line Message API Echo Server is running!");
 });
 
+
+import { checkedResponse } from "./types";
+import { checkRequestBody } from "./Line/verifier";
 // Line Messaging API からのWebhookを処理するエンドポイント
 app.post("/webhook", (req: any, res: any) => {
 
@@ -31,21 +34,18 @@ app.post("/webhook", (req: any, res: any) => {
 	// bodyの中身を確認
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
 
-	if (req.body.events.length === 0) {
-		console.log("No events found. its Verify the request is a valid LINE Messaging API event.");
-		return res.status(200).send("No events found. Verify the request is a valid LINE Messaging API event.");
+	const checkedRequest = checkRequestBody(req.body);
+
+	if (checkedRequest.type === "error") {
+		console.log(checkedRequest.text);
+		return res.status(200).send(checkedRequest.text);
 	}
 
-	const textmessage = req.body.events[0].message.text;
-	console.log(textmessage);
-	console.log("Received webhook:", textmessage);
+	console.log(checkedRequest.text);
+	console.log("Received webhook:", req.body.events[0]);
 
 	// 応答メッセージを作成
-	if (req.body.events[0].message.type !== "text") {
-	}
 	const replyToken = req.body.events[0].replyToken;
-	const messages = [textmessage];
-
 	const CHANNEL_ACCESS_TOKEN = process.env.CHANNEL_ACCESS_TOKEN;
 
 	// 必要な情報が揃っているか確認
@@ -55,7 +55,7 @@ app.post("/webhook", (req: any, res: any) => {
 	}
 
 	// LINE API にメッセージを送信
-	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, messages)
+	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, [checkedRequest.text])
 		.then(() => {
 			res.send("OK");
 		})

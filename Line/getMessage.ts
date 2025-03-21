@@ -1,16 +1,31 @@
-function getImage(id: string): any {
+import { checkedResponse } from "../types";
+
+export function getImage(id: string): checkedResponse {
     return {
-        type: "image",
-        originalContentUrl: `https://example.com/original.jpg`,
-        previewImageUrl: `https://example.com/preview.jpg`,
+        type: "text",
+        text: "画像を受け取りました"
     };
 
 }
 
 
-export function getMessage(request: any): string {
+export function getMessage(request: any): checkedResponse {
+    return {
+        type: "text",
+        text: request.events[0].message.text
+    };
+}
 
+export function greetings(request: any): checkedResponse {
+    return {
+        type: "text",
+        text: "フォローありがとう！ よろしくね！"
+    };
+}
 
-
-    return "";
+export function getStamp(request: any): checkedResponse {
+    return {
+        type: "text",
+        text: "スタンプを受け取りました"
+    };
 }
