@@ -11,12 +11,9 @@ export function verifyRequest(
     return hash === signature;
 }
 
-
-
+// bodyの中身を確認
 import { checkedResponse } from "../types";
 import { getImage, getMessage, greetings, getStamp } from "./getMessage";
-
-// bodyの中身を確認
 export function checkRequestBody(
     request: any
 ): checkedResponse {
@@ -29,6 +26,7 @@ export function checkRequestBody(
         };
     }
 
+    // Events.typeがmessage以外の場合はエラー
     if (request.events[0].type !== "message") {
         console.log("No events found. its Verify the request is a valid LINE Messaging API event.");
         return {
@@ -37,7 +35,7 @@ export function checkRequestBody(
         };
     }
 
-    // events.typeを取得
+    // events.message.typeを取得
     const eventType = request.events[0].message.type;
 
     if (eventType === "text") {
