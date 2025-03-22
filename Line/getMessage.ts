@@ -17,6 +17,10 @@ export function getImage(id: string): checkedResponse {
     };
 }
 
+import { saveReceipt, getReceipt, getUserReceipts } from "../Database/recipets";
+import { Receipt } from "../types";
+import { get } from "http";
+
 export function getMessage(request: any): checkedResponse {
 
     const message = request.events[0].message.text;
@@ -24,6 +28,35 @@ export function getMessage(request: any): checkedResponse {
     // メッセージの解析
 
     // 処理分岐
+
+    const pattern = /テスト/
+
+    if (pattern.test(message)) {
+        const recipetData: Receipt = {
+            userID: "test",
+            recipetID: 1,
+            date: "2021-09-01",
+            shopName: "testShop",
+            summaryPrice: 1000,
+            items: [
+                {
+                    itemName: "testItem",
+                    itemPrice: 1000
+                }
+            ]
+        };
+
+        saveReceipt(recipetData);
+
+        console.log("レシートを保存しました");
+        console.log(getReceipt("test", 1));
+
+        return {
+            type: "text",
+            text: "レシートを保存しました"
+        };
+
+    }
 
     // 収入登録
     // 出費確認
