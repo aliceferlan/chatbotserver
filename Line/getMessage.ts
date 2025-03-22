@@ -49,7 +49,7 @@ export function getMessage(request: any): checkedResponse {
         saveReceipt(recipetData);
 
         console.log("レシートを保存しました");
-        console.log(getReceipt("test", 1));
+        console.log(getReceipt("test"));
 
         return {
             type: "text",

@@ -4,7 +4,7 @@ import { Receipt } from "../types";
 import { getDocumentClient } from "./dynamodb";
 
 // レシートの取得
-export async function getReceipt(userID: string, recipetID: number): Promise<Receipt | null> {
+export async function getReceipt(userID: string): Promise<Receipt | null> {
 
     const docClient = getDocumentClient();
 
@@ -34,7 +34,7 @@ export async function saveReceipt(receipt: Receipt): Promise<void> {
 
     // PutCommandの作成
     const command = new PutCommand({
-        TableName: "FinanceTable",
+        TableName: "smart-account-book",
         Item: receipt
     });
 
