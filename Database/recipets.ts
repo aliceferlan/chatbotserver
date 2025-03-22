@@ -32,6 +32,8 @@ export async function saveReceipt(receipt: Receipt): Promise<void> {
     // レシートIDの生成
     receipt.recipetID = parseInt(uuid(), 10);
 
+    console.log("Saving receipt:", receipt);
+
     // PutCommandの作成
     const command = new PutCommand({
         TableName: "smart-account-book",
