@@ -63,7 +63,7 @@ export async function getMessage(request: any): Promise<checkedResponse> {
 
     const pattern2 = /ユーザー確認/
     if (pattern2.test(message)) {
-        const result = getReceipt("test");
+        const result = await getReceipt("test");
 
         console.log(result);
 
