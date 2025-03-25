@@ -18,7 +18,7 @@ app.get("/", (req: any, res: any) => {
 import { checkedResponse } from "./types";
 import { checkRequestBody } from "./Line/verifier";
 // Line Messaging API からのWebhookを処理するエンドポイント
-app.post("/webhook", (req: any, res: any) => {
+app.post("/webhook", async (req: any, res: any) => {
 
 	// リクエストの検証
 	const channelSecret = process.env.CHANNEL_SECRET;
@@ -34,7 +34,7 @@ app.post("/webhook", (req: any, res: any) => {
 	// bodyの中身を確認
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
 
-	const checkedRequest = checkRequestBody(req.body);
+	const checkedRequest = await checkRequestBody(req.body);
 
 	if (checkedRequest.type === "error") {
 		console.log(checkedRequest.text);
