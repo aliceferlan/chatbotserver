@@ -4,7 +4,7 @@ import { Receipt } from "../types";
 import { getDocumentClient } from "./dynamodb";
 
 // レシートの取得
-export async function getReceipt(userID: string): Promise<Receipt | null> {
+export async function getReceipt(userID: string): Promise<Receipt[] | null> {
 
     const docClient = getDocumentClient();
 
@@ -18,7 +18,7 @@ export async function getReceipt(userID: string): Promise<Receipt | null> {
 
     try {
         const response = await docClient.send(command);
-        return response.Items?.[0] as Receipt || null;
+        return response.Items as Receipt[] || null;
     } catch (error) {
         console.error("Error fetching receipt:", error);
         throw error;
