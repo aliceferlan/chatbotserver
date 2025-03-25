@@ -14,9 +14,9 @@ export function verifyRequest(
 // bodyの中身を確認
 import { checkedResponse } from "../types";
 import { getImage, getMessage, greetings, getStamp } from "./getMessage";
-export function checkRequestBody(
+export async function checkRequestBody(
     request: any
-): checkedResponse {
+): Promise<checkedResponse> {
     // Eventsがない場合はエラー
     if (request.events.length === 0) {
         console.log("No events found. its Verify the request is a valid LINE Messaging API event.");

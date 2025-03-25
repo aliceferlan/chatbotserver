@@ -1,6 +1,6 @@
 import { checkedResponse } from "../types";
 
-export function getImage(id: string): checkedResponse {
+export async function getImage(id: string): Promise<checkedResponse> {
 
     // 画像のパスを取得
 
@@ -21,7 +21,7 @@ import { saveReceipt, getReceipt, getUserReceipts } from "../Database/recipets";
 import { Receipt } from "../types";
 import { get } from "http";
 
-export function getMessage(request: any): checkedResponse {
+export async function getMessage(request: any): Promise<checkedResponse> {
 
     const message = request.events[0].message.text;
 
@@ -83,14 +83,14 @@ export function getMessage(request: any): checkedResponse {
     };
 }
 
-export function greetings(request: any): checkedResponse {
+export async function greetings(request: any): Promise<checkedResponse> {
     return {
         type: "text",
         text: "フォローありがとう！ よろしくね！"
     };
 }
 
-export function getStamp(request: any): checkedResponse {
+export async function getStamp(request: any): Promise<checkedResponse> {
     return {
         type: "text",
         text: "スタンプを受け取りました"
