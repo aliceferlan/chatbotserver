@@ -9,7 +9,7 @@ export async function getReceipt(userID: string): Promise<Receipt | null> {
     const docClient = getDocumentClient();
 
     const command = new GetCommand({
-        TableName: "FinanceTable",
+        TableName: "smart-account-book",
         Key: {
             userID
         }
