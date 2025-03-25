@@ -55,11 +55,24 @@ export function getMessage(request: any): checkedResponse {
             type: "text",
             text: "レシートを保存しました"
         };
-
     }
+
 
     // 収入登録
     // 出費確認
+
+    const pattern2 = /ユーザー確認/
+    if (pattern2.test(message)) {
+        const result = getReceipt("test");
+
+        console.log(result);
+
+        return {
+            type: "text",
+            text: "ユーザー確認"
+        }
+    }
+
     // 予算確認
     // ヘルプ
 
