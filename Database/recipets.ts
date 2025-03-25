@@ -12,7 +12,7 @@ export async function getReceipt(userID: string): Promise<Receipt | null> {
         TableName: "smart-account-book",
         KeyConditionExpression: "userID = :userID",
         ExpressionAttributeValues: {
-            userID: userID
+            ":userID": userID
         }
     });
 
