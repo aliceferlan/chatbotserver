@@ -8,16 +8,17 @@ export async function getReceipt(userID: string): Promise<Receipt | null> {
 
     const docClient = getDocumentClient();
 
-    const command = new GetCommand({
+    const command = new QueryCommand({
         TableName: "smart-account-book",
-        Key: {
-            userID
+        KeyConditionExpression: "userID = :userID",
+        ExpressionAttributeValues: {
+            userID: userID
         }
     });
 
     try {
         const response = await docClient.send(command);
-        return response.Item as Receipt || null;
+        return response.Items?.[0] as Receipt || null;
     } catch (error) {
         console.error("Error fetching receipt:", error);
         throw error;
