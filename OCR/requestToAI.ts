@@ -37,18 +37,24 @@ async function send(imageInput: ImageData, model: string): Promise<string> {
     }
 };
 
+function removeJsonMarkdown(input: string): string {
+    // 正規表現を使用して、先頭の```jsonと最後の```を削除
+    return input.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+}
+
+
 async function sendRequestToAI(input: ImageData): Promise<RecieptResponse | RecieptErrorResponse> {
 
     const response = await send(input, "gemini-2.0-flash");
 
-    const responseJson = JSON.parse(response);
+    const responseJson = JSON.parse(removeJsonMarkdown(response));
 
     if ('error' in responseJson || 'data' in responseJson) {
         return responseJson;
     }
 
     const reResponse = await send(input, "gemini-1.5-pro");
-    const reResponseJson = JSON.parse(reResponse);
+    const reResponseJson = JSON.parse(removeJsonMarkdown(reResponse));
     return reResponseJson;
 }
 
