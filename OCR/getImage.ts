@@ -7,6 +7,7 @@ async function fileToGenerativePart(fileURL: string, mimeType: string): Promise<
     const axios = require("axios");
     const response = await axios.get(fileURL, { responseType: "arraybuffer" });
     const fileBuffer = Buffer.from(response.data);
+    console.log("fileBuffer", fileBuffer);
     return {
         inlineData: {
             data: fileBuffer.toString("base64"),
