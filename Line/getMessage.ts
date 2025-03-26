@@ -1,19 +1,25 @@
 import { checkedResponse } from "../types";
+import { getRecieptData } from "../OCR/getRecieptData";
 
-export async function getImage(id: string): Promise<checkedResponse> {
+export async function getImage(request: any): Promise<checkedResponse> {
 
     // 画像のパスを取得
+    const messageID = request.events[0].message.id;
 
     // AIに画像を送信
-
     // AIからの返答を取得
+    const response = await getRecieptData(messageID);
 
     // DBにOCRデータを保存
+
+
+
+
 
     // 返答を返す
     return {
         type: "text",
-        text: "画像を受け取りました"
+        text: "OCR結果　:" + JSON.stringify(response)
     };
 }
 

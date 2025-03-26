@@ -19,6 +19,26 @@ export interface ReceiptItem {
     itemPrice: number;
 }
 
+export interface RecieptResponse {
+    shopName: string;
+    date: string;
+    time: string;
+    items: [
+        {
+            name: string;
+            price: number;
+        }
+    ];
+    total: number;
+    paymentMethod: string;
+}
+
+export interface RecieptErrorResponse {
+    error: string;
+    contentType: string;
+    suggestion: string;
+}
+
 // 画像データの型定義
 export interface ImageData {
     inlineData: {
