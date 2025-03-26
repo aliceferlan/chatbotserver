@@ -7,7 +7,6 @@
 		"start": "node index.ts",
 		"dev": "nodemon index.ts"
 	},
-	"type": "module",
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.772.0",
 		"@aws-sdk/lib-dynamodb": "^3.774.0",
