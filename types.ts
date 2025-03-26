@@ -18,3 +18,11 @@ export interface ReceiptItem {
     itemName: string;
     itemPrice: number;
 }
+
+// 画像データの型定義
+export interface ImageData {
+    inlineData: {
+        data: string;
+        mimeType: string;
+    };
+}

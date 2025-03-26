@@ -1,3 +1,19 @@
+import fs from "fs";
+import { ImageData } from "../types";
+
+// 画像ファイルをBase64エンコードする関数
+// mimeType : image/png, image/jpeg image/gif image/webp etc...
+function fileToGenerativePart(filePath: string, mimeType: string): ImageData {
+    const fileBuffer = fs.readFileSync(filePath);
+    return {
+        inlineData: {
+            data: fileBuffer.toString("base64"),
+            mimeType,
+        },
+    };
+}
+
+
 export async function getImageLine(request: any): Promise<string> {
 
     const messageID = "hello"
