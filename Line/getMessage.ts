@@ -17,7 +17,7 @@ function checkRecastReciept(response: string, userID: string): Receipt {
         summaryPrice: recieptData.合計,
         currencyUnit: recieptData.通貨単位,
         paymentMethod: recieptData.支払い方法,
-        items: recieptData.items.map((item: any) => {
+        items: recieptData.詳細.map((item: any) => {
             return {
                 itemName: item.商品名,
                 itemPrice: item.単価,
