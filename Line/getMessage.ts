@@ -33,13 +33,16 @@ function checkRecastReciept(response: string, userID: string): Receipt {
 
 export async function getImage(request: any): Promise<checkedResponse> {
 
+    console.log("getImage running");
     // 画像のパスを取得
     const messageID = request.events[0].message.id;
 
+    console.log("getRecieptData running:", messageID);
     // AIに画像を送信
     // AIからの返答を取得
     const response = await getRecieptData(messageID);
 
+    console.log("getRecieptData response:", response);
     // Response をReciept型に変換
     // DBにOCRデータを保存
     await saveReceipt(checkRecastReciept(JSON.stringify(response), request.events[0].source.userId)
