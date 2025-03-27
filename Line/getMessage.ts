@@ -1,5 +1,35 @@
 import { checkedResponse } from "../types";
 import { getRecieptData } from "../OCR/getRecieptData";
+import { saveReceipt, getReceipt, getUserReceipts } from "../Database/recipets";
+import { Receipt } from "../types";
+
+function checkRecastReciept(response: string, userID: string): Receipt {
+    const recieptData = JSON.parse(response);
+
+    const reciept: Receipt = {
+        userID: userID,
+        recipetID: 1,
+        date: recieptData.日付,
+        time: recieptData.時間,
+        shopName: recieptData.店名,
+        address: recieptData.住所,
+        phone: recieptData.電話番号,
+        summaryPrice: recieptData.合計,
+        currencyUnit: recieptData.通貨単位,
+        paymentMethod: recieptData.支払い方法,
+        items: recieptData.items.map((item: any) => {
+            return {
+                itemName: item.商品名,
+                itemPrice: item.単価,
+                quantity: item.数量,
+                category: item.カテゴリ,
+            }
+        })
+    }
+
+    return reciept;
+}
+
 
 export async function getImage(request: any): Promise<checkedResponse> {
 
@@ -10,9 +40,10 @@ export async function getImage(request: any): Promise<checkedResponse> {
     // AIからの返答を取得
     const response = await getRecieptData(messageID);
 
+    // Response をReciept型に変換
     // DBにOCRデータを保存
-
-
+    await saveReceipt(checkRecastReciept(JSON.stringify(response), request.events[0].source.userId)
+    );
 
 
 
@@ -22,10 +53,6 @@ export async function getImage(request: any): Promise<checkedResponse> {
         text: "OCR結果　:" + JSON.stringify(response)
     };
 }
-
-import { saveReceipt, getReceipt, getUserReceipts } from "../Database/recipets";
-import { Receipt } from "../types";
-import { get } from "http";
 
 export async function getMessage(request: any): Promise<checkedResponse> {
 

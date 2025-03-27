@@ -9,14 +9,21 @@ export interface Receipt {
     userID: string;
     recipetID: number;
     date?: string;
+    time?: string;
     shopName?: string;
+    phone?: string;
+    address?: string;
     summaryPrice?: number;
+    currencyUnit?: string;
+    paymentMethod?: string;
     items?: ReceiptItem[];
 }
 
 export interface ReceiptItem {
     itemName: string;
     itemPrice: number;
+    quantity?: number;
+    category?: string;
 }
 
 export interface RecieptResponse {
