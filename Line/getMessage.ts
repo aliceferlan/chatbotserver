@@ -17,14 +17,14 @@ function checkRecastReciept(response: string, userID: string): Receipt {
         summaryPrice: recieptData.合計,
         currencyUnit: recieptData.通貨単位,
         paymentMethod: recieptData.支払い方法,
-        items: recieptData.詳細.map((item: any) => {
-            return {
-                itemName: item.商品名,
-                itemPrice: item.単価,
-                quantity: item.数量,
-                category: item.カテゴリ,
-            }
-        })
+        items: Array.isArray(recieptData.詳細)
+            ? recieptData.詳細.map((item: any) => ({
+                itemName: item.商品名 || "",
+                itemPrice: item.単価 || 0,
+                quantity: item.数量 || 1,
+                category: item.カテゴリ || "",
+            }))
+            : []
     }
 
     return reciept;
