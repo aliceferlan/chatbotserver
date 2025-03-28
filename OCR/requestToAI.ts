@@ -37,7 +37,7 @@ async function send(imageInput: ImageData, model: string): Promise<string> {
 
 function removeJsonMarkdown(input: string): string {
     // 正規表現を使用して、先頭の```jsonと最後の```を削除
-    return input.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+    return input.trim().replace(/^```json\s*/, '').replace(/\s*```$/, '').trim();
 }
 
 
