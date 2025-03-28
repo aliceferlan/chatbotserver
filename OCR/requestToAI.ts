@@ -48,8 +48,8 @@ async function sendRequestToAI(input: ImageData): Promise<RecieptResponse | Reci
 
     const responseJson = JSON.parse(removeJsonMarkdown(response));
 
+    return responseJson;
     if ('error' in responseJson || 'data' in responseJson) {
-        return responseJson;
     }
 
     const reResponse = await send(input, "gemini-1.5-pro");
