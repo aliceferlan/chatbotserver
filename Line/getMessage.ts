@@ -8,7 +8,7 @@ function checkRecastReciept(response: string, userID: string): Receipt {
     console.log("checkRecastReciept running");
 
     console.log("response:", response);
-    const recieptData = JSON.parse(response);
+    const recieptData = JSON.parse(response)[0];
 
     const reciept: Receipt = {
         userID: userID,
@@ -49,7 +49,7 @@ export async function getImage(request: any): Promise<checkedResponse> {
     console.log("getRecieptData response:", response);
     // Response をReciept型に変換
     // DBにOCRデータを保存
-    await saveReceipt(checkRecastReciept(JSON.stringify(response)[0], request.events[0].source.userId)
+    await saveReceipt(checkRecastReciept(JSON.stringify(response), request.events[0].source.userId)
     );
 
 
