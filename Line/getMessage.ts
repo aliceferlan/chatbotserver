@@ -49,7 +49,7 @@ export async function getImage(request: any): Promise<checkedResponse> {
     console.log("getRecieptData response:", response);
     // Response をReciept型に変換
     // DBにOCRデータを保存
-    await saveReceipt(checkRecastReciept(JSON.stringify(response), request.events[0].source.userId)
+    await saveReceipt(checkRecastReciept(JSON.stringify(response)[0], request.events[0].source.userId)
     );
 
 
