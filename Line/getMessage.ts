@@ -4,6 +4,10 @@ import { saveReceipt, getReceipt, getUserReceipts } from "../Database/recipets";
 import { Receipt } from "../types";
 
 function checkRecastReciept(response: string, userID: string): Receipt {
+
+    console.log("checkRecastReciept running");
+
+    console.log("response:", response);
     const recieptData = JSON.parse(response);
 
     const reciept: Receipt = {
@@ -26,7 +30,7 @@ function checkRecastReciept(response: string, userID: string): Receipt {
             }))
             : []
     }
-
+    console.log("reciept:", reciept);
     return reciept;
 }
 
