@@ -44,7 +44,7 @@ function removeJsonMarkdown(input: string): string {
 async function sendRequestToAI(input: ImageData): Promise<RecieptResponse | RecieptErrorResponse> {
 
     // const response = await send(input, "gemini-2.0-flash");
-    const response = await send(input, "gemini-1.5-pro");
+    const response = await send(input, "gemini-1.5-flash");
 
     const responseJson = JSON.parse(removeJsonMarkdown(response));
 
