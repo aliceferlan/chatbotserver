@@ -38,7 +38,7 @@ export async function saveReceipt(receipt: Receipt): Promise<void> {
     console.log("Saving receipt:", receipt);
 
     const command = new PutCommand({
-        TableName: "FinanceTable", // DynamoDBのテーブル名
+        TableName: "smart-account-book", // DynamoDBのテーブル名
         Item: receipt,
     });
 
