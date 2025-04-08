@@ -75,24 +75,27 @@ export async function getUserReceipts(userID: string): Promise<Receipt[]> {
 export async function getUserReceiptByDateTime(userID: string, date: string, time: string): Promise<Receipt | null> {
     const docClient = getDocumentClient();
 
+    console.log(`Querying receipt for userID: ${userID}, date: ${date}, time: ${time}`);
+
     // パーティションキー(userID)だけをKeyConditionExpressionで使用
     const command = new QueryCommand({
         TableName: "smart-account-book",
         KeyConditionExpression: "userID = :uid",
-        FilterExpression: "#date = :date AND #time = :time", // FilterExpressionに移動
+        FilterExpression: "#dateAttr = :dateValue AND #timeAttr = :timeValue", // 修正: 属性名と値を明確に
         ExpressionAttributeNames: {
-            "#date": "date",
-            "#time": "time"
+            "#dateAttr": "date", // 修正: より明確な名前
+            "#timeAttr": "time"  // 修正: より明確な名前
         },
         ExpressionAttributeValues: {
             ":uid": userID,
-            ":date": date,
-            ":time": time
+            ":dateValue": date,   // 修正: 値に明確な名前
+            ":timeValue": time    // 修正: 値に明確な名前
         }
     });
 
     try {
         const response = await docClient.send(command);
+        console.log(`Query response: ${JSON.stringify(response.Items)}`);
         return response.Items && response.Items.length > 0 ? (response.Items[0] as Receipt) : null;
     } catch (error) {
         console.error("Error querying receipts:", error);
