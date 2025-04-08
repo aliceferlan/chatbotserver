@@ -75,9 +75,11 @@ export async function getUserReceipts(userID: string): Promise<Receipt[]> {
 export async function getUserReceiptByDateTime(userID: string, date: string, time: string): Promise<Receipt | null> {
     const docClient = getDocumentClient();
 
+    // パーティションキー(userID)だけをKeyConditionExpressionで使用
     const command = new QueryCommand({
         TableName: "smart-account-book",
-        KeyConditionExpression: "userID = :uid AND #date = :date AND #time = :time",
+        KeyConditionExpression: "userID = :uid",
+        FilterExpression: "#date = :date AND #time = :time", // FilterExpressionに移動
         ExpressionAttributeNames: {
             "#date": "date",
             "#time": "time"
