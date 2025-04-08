@@ -55,7 +55,7 @@ export async function getUserReceipts(userID: string): Promise<Receipt[]> {
     const docClient = getDocumentClient();
 
     const command = new QueryCommand({
-        TableName: "FinanceTable",
+        TableName: "smart-account-book",
         KeyConditionExpression: "userID = :uid",
         ExpressionAttributeValues: {
             ":uid": userID

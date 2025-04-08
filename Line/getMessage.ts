@@ -12,7 +12,7 @@ function checkRecastReciept(response: string, userID: string): Receipt {
 
     const reciept: Receipt = {
         userID: userID,
-        recipetID: 1,
+        recipetID: '1',
         date: recieptData.日付,
         time: recieptData.時間,
         shopName: recieptData.店名,
@@ -76,7 +76,7 @@ export async function getMessage(request: any): Promise<checkedResponse> {
     if (pattern.test(message)) {
         const recipetData: Receipt = {
             userID: "test",
-            recipetID: 1,
+            recipetID: '1',
             date: "2021-09-01",
             time: "12:00", // Added missing property
             shopName: "testShop",
