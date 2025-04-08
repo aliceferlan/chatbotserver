@@ -81,15 +81,15 @@ export async function getUserReceiptByDateTime(userID: string, date: string, tim
     const command = new QueryCommand({
         TableName: "smart-account-book",
         KeyConditionExpression: "userID = :uid",
-        FilterExpression: "#dateAttr = :dateValue AND #timeAttr = :timeValue", // 修正: 属性名と値を明確に
+        FilterExpression: "#dateAttr = :dateVal AND #timeAttr = :timeVal", // 属性値の名前を修正
         ExpressionAttributeNames: {
-            "#dateAttr": "date", // 修正: より明確な名前
-            "#timeAttr": "time"  // 修正: より明確な名前
+            "#dateAttr": "date",
+            "#timeAttr": "time"
         },
         ExpressionAttributeValues: {
             ":uid": userID,
-            ":dateValue": date,   // 修正: 値に明確な名前
-            ":timeValue": time    // 修正: 値に明確な名前
+            ":dateVal": date,     // FilterExpressionと一致するように名前を変更
+            ":timeVal": time      // FilterExpressionと一致するように名前を変更
         }
     });
 
