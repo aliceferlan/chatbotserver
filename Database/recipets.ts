@@ -77,7 +77,7 @@ export async function getUserReceiptByDateTime(userID: string, date: string, tim
     const docClient = getDocumentClient();
 
     const command = new QueryCommand({
-        TableName: "FinanceTable",
+        TableName: "smart-account-book",
         KeyConditionExpression: "userID = :uid AND #date = :date AND #time = :time",
         ExpressionAttributeNames: {
             "#date": "date",
