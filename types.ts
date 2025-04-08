@@ -7,7 +7,7 @@ export type checkedResponse = {
 // レシートの型定義
 export interface Receipt {
     userID: string;
-    recipetID?: string;
+    recipetID?: number;
     date: string;
     time: string;
     shopName?: string;
