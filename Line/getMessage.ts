@@ -21,6 +21,8 @@ function checkRecastReciept(response: string, userID: string): Receipt {
         summaryPrice: recieptData.合計,
         currencyUnit: recieptData.通貨単位,
         paymentMethod: recieptData.支払い方法,
+        amount: recieptData.合計, // Assuming '合計' represents the total amount
+        description: recieptData.説明 || "", // Assuming '説明' represents the description
         items: Array.isArray(recieptData.詳細)
             ? recieptData.詳細.map((item: any) => ({
                 itemName: item.商品名 || "",
@@ -76,8 +78,11 @@ export async function getMessage(request: any): Promise<checkedResponse> {
             userID: "test",
             recipetID: 1,
             date: "2021-09-01",
+            time: "12:00", // Added missing property
             shopName: "testShop",
             summaryPrice: 1000,
+            amount: 1000, // Added missing property
+            description: "Test receipt", // Added missing property
             items: [
                 {
                     itemName: "testItem",

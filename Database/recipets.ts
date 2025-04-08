@@ -3,6 +3,9 @@ import { v4 as uuid } from "uuid";
 import { Receipt } from "../types";
 import { getDocumentClient } from "./dynamodb";
 
+// レシート型の定義を補足
+
+
 // レシートの取得
 export async function getReceipt(userID: string): Promise<Receipt[] | null> {
 
@@ -27,7 +30,6 @@ export async function getReceipt(userID: string): Promise<Receipt[] | null> {
 
 // レシートの保存
 export async function saveReceipt(receipt: Receipt): Promise<void> {
-    // ドキュメントクライアントの取得
     const docClient = getDocumentClient();
 
     // レシートIDの生成
@@ -35,13 +37,11 @@ export async function saveReceipt(receipt: Receipt): Promise<void> {
 
     console.log("Saving receipt:", receipt);
 
-    // PutCommandの作成
     const command = new PutCommand({
-        TableName: "smart-account-book",
-        Item: receipt
+        TableName: "FinanceTable", // DynamoDBのテーブル名
+        Item: receipt,
     });
 
-    // レシートの保存
     try {
         await docClient.send(command);
     } catch (error) {
@@ -65,6 +65,34 @@ export async function getUserReceipts(userID: string): Promise<Receipt[]> {
     try {
         const response = await docClient.send(command);
         return response.Items as Receipt[] || [];
+    } catch (error) {
+        console.error("Error querying receipts:", error);
+        throw error;
+    }
+}
+
+
+// ユーザーのレシートから指定された日付と時間が一致するレシートを取得
+export async function getUserReceiptByDateTime(userID: string, date: string, time: string): Promise<Receipt | null> {
+    const docClient = getDocumentClient();
+
+    const command = new QueryCommand({
+        TableName: "FinanceTable",
+        KeyConditionExpression: "userID = :uid AND #date = :date AND #time = :time",
+        ExpressionAttributeNames: {
+            "#date": "date",
+            "#time": "time"
+        },
+        ExpressionAttributeValues: {
+            ":uid": userID,
+            ":date": date,
+            ":time": time
+        }
+    });
+
+    try {
+        const response = await docClient.send(command);
+        return response.Items && response.Items.length > 0 ? (response.Items[0] as Receipt) : null;
     } catch (error) {
         console.error("Error querying receipts:", error);
         throw error;
