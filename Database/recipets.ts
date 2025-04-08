@@ -33,7 +33,7 @@ export async function saveReceipt(receipt: Receipt): Promise<void> {
     const docClient = getDocumentClient();
 
     // レシートIDの生成
-    receipt.recipetID = parseInt(uuid(), 10);
+    receipt.recipetID = uuid(); // UUIDを生成してレシートIDに設定
 
     console.log("Saving receipt:", receipt);
 
