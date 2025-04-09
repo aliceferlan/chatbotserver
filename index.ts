@@ -43,6 +43,13 @@ app.post("/webhook", async (req: any, res: any) => {
 
 	// 受信通知を送信
 	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, ["受信しました"])
+		.then(() => {
+			res.send("OK");
+		})
+		.catch(error => {
+			console.error("Error sending receipt notification:", error);
+			res.status(500).send("Error");
+		});
 
 	// bodyの中身を確認
 	console.log("Received webhook:", JSON.stringify(req.body, null, 2));
@@ -137,8 +144,14 @@ app.post("/savedb", async (req: any, res: any) => {
 	}
 
 	// 受信通知を送信
-	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, ["受信しました"]);
-	res.send("OK");
+	sendResponse(replyToken, CHANNEL_ACCESS_TOKEN, ["受信しました"])
+		.then(() => {
+			res.send("OK");
+		})
+		.catch(error => {
+			console.error("Error sending receipt notification:", error);
+			res.status(500).send("Error");
+		});
 });
 
 // サーバーのポート設定（Vercelではポート設定は無視されますが、ローカルテスト用に設定）
