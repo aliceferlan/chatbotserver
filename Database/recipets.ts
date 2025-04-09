@@ -77,26 +77,33 @@ export async function getUserReceiptByDateTime(userID: string, date: string, tim
 
     console.log(`Querying receipt for userID: ${userID}, date: ${date}, time: ${time}`);
 
-    // パーティションキー(userID)だけをKeyConditionExpressionで使用
+    // デバッグ情報を追加 - DBの値と比較
+    console.log("Querying with exact values:");
+    console.log(`Date format in DB (expected): YYYY/MM/DD, Provided: ${date}`);
+    console.log(`Time format in DB (examples): 21:34, 18:02:37, 20:43, Provided: ${time}`);
+
+    // パーティションキー(userID)だけをKeyConditionExpressionで使用し、日付と時間のフィルタリングは行わない
     const command = new QueryCommand({
         TableName: "smart-account-book",
         KeyConditionExpression: "userID = :uid",
-        FilterExpression: "#dateAttr = :dateVal AND #timeAttr = :timeVal", // 属性値の名前を修正
-        ExpressionAttributeNames: {
-            "#dateAttr": "date",
-            "#timeAttr": "time"
-        },
         ExpressionAttributeValues: {
-            ":uid": userID,
-            ":dateVal": date,     // FilterExpressionと一致するように名前を変更
-            ":timeVal": time      // FilterExpressionと一致するように名前を変更
+            ":uid": userID
         }
     });
 
     try {
         const response = await docClient.send(command);
-        console.log(`Query response: ${JSON.stringify(response.Items)}`);
-        return response.Items && response.Items.length > 0 ? (response.Items[0] as Receipt) : null;
+        console.log(`Query response items count: ${response.Items?.length || 0}`);
+
+        // クライアント側でフィルタリング
+        const filteredItems = response.Items?.filter(item =>
+            item.date === date && item.time === time
+        );
+
+        console.log(`Filtered items count: ${filteredItems?.length || 0}`);
+        console.log(`Filtered items: ${JSON.stringify(filteredItems)}`);
+
+        return filteredItems && filteredItems.length > 0 ? (filteredItems[0] as Receipt) : null;
     } catch (error) {
         console.error("Error querying receipts:", error);
         throw error;
